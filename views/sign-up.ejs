@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up - ZooxTech</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+</head>
+
+<body class="bg-gradient-to-br from-gray-900 via-black to-gray-900 min-h-screen flex flex-col overflow-hidden">
+
+  <%- include('/partials/header.ejs') %>
+    <!-- MAIN SECTION -->
+    <div class="flex-1 flex items-center justify-center relative overflow-hidden">
+
+      <!-- Floating Glow Background -->
+      <div
+        class="fixed w-[500px] h-[500px] bg-green-500/20 rounded-full blur-3xl top-1/4 left-1/4 pointer-events-none float-slow glow">
+      </div>
+      <div
+        class="fixed w-[400px] h-[400px] bg-purple-500/20 rounded-full blur-3xl bottom-1/4 right-1/4 pointer-events-none float-medium glow">
+      </div>
+
+      <!-- Signup Card with fade-slide -->
+      <div
+        class="bg-white/5 backdrop-blur-lg border border-green-400/20 rounded-2xl shadow-2xl p-10 w-full max-w-md relative z-10 fade-slide sign-up-card">
+        <div class="flex justify-center mb-6">
+          <div class="w-12 h-12 bg-green-500 rounded-full shadow-lg shadow-green-500/50 animate-pulse"></div>
+        </div>
+        <h2 class="text-2xl font-bold text-green-400 mb-6 text-center">Create Account</h2>
+
+        <form action="/signup" method="POST" class="space-y-5">
+          <input type="text" name="FirstName" placeholder="First Name"
+            class="w-full p-3 rounded-xl bg-white/10 text-white placeholder-gray-400 border border-green-400/20 focus:border-green-400 focus:ring-2 focus:ring-green-400/40 outline-none transition duration-300 hover:shadow-lg hover:shadow-green-500/20"
+            required />
+            <input type="text" name="LastName" placeholder="Last Name"
+            class="w-full p-3 rounded-xl bg-white/10 text-white placeholder-gray-400 border border-green-400/20 focus:border-green-400 focus:ring-2 focus:ring-green-400/40 outline-none transition duration-300 hover:shadow-lg hover:shadow-green-500/20"
+            required />
+           
+          <input type="text" name="username" placeholder="Username"
+            class="w-full p-3 rounded-xl bg-white/10 text-white placeholder-gray-400 border border-green-400/20 focus:border-green-400 focus:ring-2 focus:ring-green-400/40 outline-none transition duration-300 hover:shadow-lg hover:shadow-green-500/20"
+            required />
+          <input type="password" name="password" placeholder="Password"
+            class="w-full p-3 rounded-xl bg-white/10 text-white placeholder-gray-400 border border-green-400/20 focus:border-green-400 focus:ring-2 focus:ring-green-400/40 outline-none transition duration-300 hover:shadow-lg hover:shadow-green-500/20"
+            required />
+          <input type="password" name="ConfirmPassword" placeholder="Confirm Password"
+            class="w-full p-3 rounded-xl bg-white/10 text-white placeholder-gray-400 border border-green-400/20 focus:border-green-400 focus:ring-2 focus:ring-green-400/40 outline-none transition duration-300 hover:shadow-lg hover:shadow-green-500/20"
+            required />
+          <button type="submit"
+            class="w-full bg-green-500/90 text-white font-semibold py-3 rounded-xl hover:bg-green-400 transition duration-300 hover:shadow-xl hover:shadow-green-500/40">
+            Sign Up
+          </button>
+        </form>
+
+        <p class="text-center text-gray-400 mt-6">
+          Already have an account?
+          <a href="/login" class="text-green-400 font-medium hover:underline">Login</a>
+        </p>
+      </div>
+    </div>
+ <script>
+
+    // Signup card springs up from bottom
+    gsap.fromTo(".sign-up-card",
+      { opacity: 0, y: 120, scale: 0.95 },
+      { opacity: 1, y: 0, scale: 1, duration: 1.2, ease: "elastic.out(1, 0.6)", delay: 0.4 }
+    );
+
+    // Inputs slide in from right with stagger
+    gsap.utils.toArray(".form-input").forEach((input, i) => {
+      gsap.fromTo(input,
+        { opacity: 0, x: 100 },
+        { opacity: 1, x: 0, duration: 0.8, delay: 0.8 + i*0.2, ease: "back.out(1.4)" }
+      );
+    });
+
+    // Button pops in with slight bounce
+    gsap.fromTo(".form-button",
+      { opacity: 0, scale: 0.8 },
+      { opacity: 1, scale: 1, duration: 0.8, delay: 1.4, ease: "back.out(1.7)" }
+    );
+
+    // Floating glows follow mouse for depth
+    const glows = document.querySelectorAll(".glow");
+    document.addEventListener("mousemove", (e) => {
+      const x = (e.clientX / window.innerWidth - 0.1) * 240;
+      const y = (e.clientY / window.innerHeight - 0.5) * 60;
+      glows.forEach((glow, i) => {
+        gsap.to(glow, { x: x*(i+1)/2, y: y*(i+1)/2, duration: 1.5, ease: "power2.out" });
+      });
+    });
+
+    // Gentle pulse for background glows
+    glows.forEach((glow, i) => {
+      gsap.to(glow, {
+        scale: 1.35,
+        duration: 4 + i*2,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut"
+      });
+    });
+
+    // Optional: subtle hover scale on card for interactivity
+    const card = document.querySelector(".sign-up-card");
+    card.addEventListener("mouseenter", () => gsap.to(card, { scale: 1.02, duration: 0.4 }));
+    card.addEventListener("mouseleave", () => gsap.to(card, { scale: 1, duration: 0.4 }));
+  </script>
+</body>
+
+</html>
