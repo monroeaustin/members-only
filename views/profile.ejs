@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cipher Lounge - Profile</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+</head>
+
+<body class="bg-gradient-to-br from-gray-900 via-black to-gray-900 min-h-screen font-mono  flex flex-col font-monos overflow-hidden text-white">
+
+  <%- include('./partials/header') %>
+    <!-- MAIN SECTION -->
+<div>
+<section class="max-w-lg my-8 mx-auto flex flex-col gap-2">
+    <form action="/admin" method="POST">
+        <label for="firstName"> Full Name</label>
+        <input type="text" name="FullName" readonly value="Alexa Rowles"
+            class="w-full p-3 rounded-xl bg-white/10 text-white placeholder-gray-400 border border-green-400/20 focus:border-green-400 focus:ring-2 focus:ring-green-400/40 outline-none transition duration-300 hover:shadow-lg hover:shadow-green-500/20" />
+
+        <label for="">Username</label>
+        <input type="text" name="username" placeholder="Username"
+            class="w-full p-3 rounded-xl bg-white/10 text-white placeholder-gray-400 border border-green-400/20 focus:border-green-400 focus:ring-2 focus:ring-green-400/40 outline-none transition duration-300 hover:shadow-lg hover:shadow-green-500/20"
+            readonly value="alexaRows291" />
+    </form>
+    <h1 class="text-lg">Status: Non-admin</h1>
+    <button class="w-full bg-green-500/90 text-white font-semibold py-3 rounded-xl hover:bg-green-400 transition">
+        <a href="/access">Request Admin Access</a>
+    </button>
+</section>
+</div>
+ <script>
+
+    // Signup card springs up from bottom
+    gsap.fromTo(".sign-up-card",
+      { opacity: 0, y: 120, scale: 0.95 },
+      { opacity: 1, y: 0, scale: 1, duration: 1.2, ease: "elastic.out(1, 0.6)", delay: 0.4 }
+    );
+
+    // Inputs slide in from right with stagger
+    gsap.utils.toArray(".form-input").forEach((input, i) => {
+      gsap.fromTo(input,
+        { opacity: 0, x: 100 },
+        { opacity: 1, x: 0, duration: 0.8, delay: 0.8 + i*0.2, ease: "back.out(1.4)" }
+      );
+    });
+
+    // Button pops in with slight bounce
+    gsap.fromTo(".form-button",
+      { opacity: 0, scale: 0.8 },
+      { opacity: 1, scale: 1, duration: 0.8, delay: 1.4, ease: "back.out(1.7)" }
+    );
+
+    // Floating glows follow mouse for depth
+    const glows = document.querySelectorAll(".glow");
+    document.addEventListener("mousemove", (e) => {
+      const x = (e.clientX / window.innerWidth - 0.1) * 240;
+      const y = (e.clientY / window.innerHeight - 0.5) * 60;
+      glows.forEach((glow, i) => {
+        gsap.to(glow, { x: x*(i+1)/2, y: y*(i+1)/2, duration: 1.5, ease: "power2.out" });
+      });
+    });
+
+    // Gentle pulse for background glows
+    glows.forEach((glow, i) => {
+      gsap.to(glow, {
+        scale: 1.35,
+        duration: 4 + i*2,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut"
+      });
+    });
+
+    // Optional: subtle hover scale on card for interactivity
+    const card = document.querySelector(".sign-up-card");
+    card.addEventListener("mouseenter", () => gsap.to(card, { scale: 1.02, duration: 0.4 }));
+    card.addEventListener("mouseleave", () => gsap.to(card, { scale: 1, duration: 0.4 }));
+  </script>
+</body>
+
+</html>

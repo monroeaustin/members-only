@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cipher Lounge - Encrypted Messages</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+</head>
+<body class="bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white font-mono min-h-screen flex flex-col">
+
+  <!-- NAVBAR -->
+  <%- include('./partials/header') %>
+
+  <!-- HERO TITLE -->
+  <section class="text-center mt-20 px-6 relative">
+    <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-green-500/20 rounded-full blur-3xl"></div>
+
+    <h1 class="text-5xl md:text-6xl font-extrabold mb-4 relative z-10 hero-title">
+      Submit Logs
+    </h1>
+    <p class="text-gray-400 max-w-xl mx-auto mb-10 relative z-10 hero-sub">
+      Every log leaves a trace. Send encrypted activity from behind the veil.
+    </p>
+     
+  </section>
+
+
+    <!-- Message Entry -->
+     <div class="w-screen">
+    <form action="/messages/new" method="POST" class="relative mx-auto  flex flex-col max-w-md w-full gap-3">
+        <label for="subject">Subject</label>
+        <input type="text" required placeholder="Secret HashTitle" maxlength="50" class="text-neutral-800" minlength="5">
+        <label for="message">Message</label>
+        <textarea name="message" id="message" placeholder="Encrypted Message" class="text-neutral-800 h-32" maxlength="150" minlength="10" required></textarea>
+        <button type="submit" class=" rounded-xl bg-green-500/80 text-white hover:bg-green-400 transition">SEND TO SERVER</button>
+    </form>
+</div>
+
+
+  <!-- FOOTER -->
+<%- include ('./partials/footer') %>
+
+  <!-- GSAP ANIMATIONS -->
+  <script>
+    gsap.fromTo(".hero-title", { x: -1000 }, { x: 0, duration: 1, ease: "power1.out" });
+    gsap.fromTo(".hero-sub", { opacity: 0, y: 80 }, { opacity: 1, y: 0, duration: 1, delay: 0.3, ease: "power4.out" });
+    gsap.fromTo(".log-cards > div", {
+      opacity: 0,
+      y: 50,
+      scale: 0.96
+    }, {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      duration: 0.8,
+      ease: "power2.out",
+      stagger: 0.15,
+      delay: 0.5
+    });
+  </script>
+</body>
+</html>

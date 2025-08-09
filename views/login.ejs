@@ -3,23 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - ZooxTech</title>
+  <title>Cipher Lounge - Login</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gradient-to-br from-gray-900 via-black to-gray-900 min-h-screen flex flex-col overflow-hidden">
+<body class="bg-gradient-to-br from-gray-900 via-black to-gray-900 min-h-screen flex flex-col font-mono overflow-hidden">
  <!-- NAVBAR -->
-  <nav class="flex justify-between items-center px-10 py-6 bg-white/5 backdrop-blur-md border-b border-white/10 sticky top-0 z-50">
-    <div class="flex items-center space-x-2">
-      <div class="w-8 h-8 rounded-full bg-green-500"></div>
-      <span class="font-bold text-green-400 text-lg tracking-wide">Cipher Lounge</span>
-    </div>
-    <div class="flex items-center space-x-6">
-
-      <a href="#" class="text-gray-300 hover:text-green-400 transition">Vault</a>
-      <a href="#" class="text-gray-300 hover:text-green-400 transition">Sign In</a>
-      <a href="/signup" class="px-4 py-2 rounded-full bg-green-500/80 text-white hover:bg-green-400 transition">Sign Up</a>
-    </div>
-  </nav>
+<%- include ('./partials/header') %>
 <div class="bg-gradient-to-br from-gray-900 via-black to-gray-900 min-h-screen flex items-center justify-center relative">
 
   <!-- Glow background -->
