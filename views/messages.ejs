@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Admin Logs - Cipher Lounge</title>
+  <title>Cipher Lounge - Encrypted Messages</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 </head>
 <body class="bg-gradient-to-br from-gray-900 via-black to-gray-900 text-white font-mono min-h-screen flex flex-col">
 
   <!-- NAVBAR -->
-  <%- include('/partials/header.ejs') %>
+  <%- include('./partials/header') %>
 
   <!-- HERO TITLE -->
   <section class="text-center mt-20 px-6 relative">
@@ -22,6 +22,7 @@
     <p class="text-gray-400 max-w-xl mx-auto mb-10 relative z-10 hero-sub">
       Every action leaves a trace. Monitor encrypted activity from behind the veil.
     </p>
+     <a href="/messages/new" class="px-4 py-2 relative rounded-full bg-green-500/90 text-white hover:bg-green-400 transition mb-5">New Message</a>
   </section>
 
   <!-- MESSAGE LOG CARDS -->
@@ -71,9 +72,7 @@
   </section>
 
   <!-- FOOTER -->
-  <footer class="text-center mt-auto pb-10 text-gray-500 border-t border-white/10 pt-10">
-    © 2025 Cipher Lounge. Surveillance warranted.
-  </footer>
+<%- include ('./partials/footer') %>
 
   <!-- GSAP ANIMATIONS -->
   <script>
