@@ -10,6 +10,26 @@ async function signUpUser (user,hashedpw){
     hashedpw
   ])
 }
+
+async function selectUser(username) {
+  try {
+    const result = await pool.query(
+      `SELECT username, password_hash FROM users WHERE username = $1`,
+      [username]
+    );
+
+    const user = result.rows[0];
+
+    if (!user) {
+      throw new Error('Username not found. Please sign up.');
+    }
+
+    return user;
+  } catch (err) {
+  throw err;
+  }
+}
+
 async function updateAdminStatus(userId) {
     try {
         const { rowCount } = await pool.query(`
@@ -67,5 +87,9 @@ async function deleteMessage(author_id,message_id) {
         throw new Error('Permission to delete message denied.')
     }
   
+}
+module.exports = {
+  signUpUser,
+  selectUser
 }
 

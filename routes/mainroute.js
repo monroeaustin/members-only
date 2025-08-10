@@ -4,6 +4,8 @@ const controller = require('../controller/homeController');
 
 router.get('/', controller.showHomePage);
 router.get('/signup', controller.showSignUp);
+router.post('/signup', controller.processSignUp);
+
 router.get('/login', controller.showLogin);
 router.get('/messages', controller.showMessages);
 router.get('/messages/new', controller.showNewMessages);
