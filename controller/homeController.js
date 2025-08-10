@@ -1,5 +1,7 @@
-cyrpt = require('bcryptjs');
+bcrypt = require('bcryptjs');
 db = require('../db/queries');
+const { check, validationResult } = require('express-validator');
+
 function showHomePage (req,res) {
     res.render('home');
 }
@@ -8,12 +10,18 @@ function showSignUp(req,res){
     res.render('sign-up');
 }
 async function processSignUp(req,res){
+
+      const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).render('sign-up-error', { errors: errors.array(), old: req.body });
+  }
+
     let userInfo = {
         "firstName":req.body.FirstName,
         "lastName":req.body.LastName,
         "username":req.body.username
     }
- hashpw = await bcrypt.hash(req.body.password, 10);
+ const hashpw = await bcrypt.hash(req.body.password, 10);
 
  try {
      await db.signUpUser({userInfo},hashpw)
@@ -29,31 +37,35 @@ function showLogin(req,res){
     res.render('login')
 }
 
-const bcrypt = require("bcryptjs");
 
 async function processLogin(req, res, next) {
   try {
-    const user = await db.selectUser(req.body.username);
+    const { username, password } = req.body;
+    
+    if (!username || !password) {
+      return res.status(400).render('login-error', { error: 'Username and password are required.' });
+    }
+
+    const user = await db.selectUser(username); 
 
     if (!user) {
-      return res.redirect("/login?error=UserNotFound");
+      
+      return res.status(401).render('login-error', { error: 'Invalid credentials.' });
     }
-
-    const match = await bcrypt.compare(req.body.password, user.password_hash);
-
+    console.log(user);
+    const match = await bcrypt.compare(password, user.password_hash);
     if (!match) {
-      return res.redirect("/profile");
+      return res.status(401).render('login-error', { error: 'Invalid credentials.' });
     }
 
-   
 
-    res.redirect("/messages");
-
+    return res.redirect('/profile');
   } catch (err) {
-    console.error("Login error:", err.message);
-    next(err);
+    console.error('Login error:', err);
+    return next(err);
   }
 }
+
 
 function showMessages (req,res) {
     res.render('messages')
@@ -78,5 +90,6 @@ module.exports =  {
     showAccess,
     showNewMessages,
     showProfle,
-    processSignUp
+    processSignUp,
+    processLogin
 }

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cipher Lounge - Login</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-gray-900 via-black to-gray-900 min-h-screen flex flex-col font-mono overflow-hidden">
+ <!-- NAVBAR -->
+<%- include ('./partials/header') %>
+<div class="bg-gradient-to-br from-gray-900 via-black to-gray-900 min-h-screen flex items-center justify-center relative">
+
+  <!-- Glow background -->
+  <div class="absolute w-[500px] h-[500px] bg-green-500/20 rounded-full blur-3xl top-1/4 left-1/4"></div>
+  <div class="absolute w-[400px] h-[400px] bg-purple-500/20 rounded-full blur-3xl bottom-1/4 right-1/4"></div>
+
+  <!-- Login Card -->
+  <div class="bg-white/5 backdrop-blur-lg border border-green-400/20 rounded-2xl shadow-xl p-10 w-full max-w-md relative z-10">
+    <div class="flex justify-center mb-6">
+      <div class="w-12 h-12 bg-green-500 rounded-full"></div>
+    </div>
+    <h2 class="text-2xl font-bold text-green-400 mb-6 text-center">Welcome Back</h2>
+    
+    <form action="/login" method="POST" class="space-y-5">
+      <input type="text" name="username" placeholder="Username"
+        class="w-full p-3 rounded-xl bg-white/10 text-white placeholder-gray-400 border border-green-400/20 focus:border-green-400 focus:ring-2 focus:ring-green-400/30 outline-none" required />
+      <input type="password" name="password" placeholder="Password"
+        class="w-full p-3 rounded-xl bg-white/10 text-white placeholder-gray-400 border border-green-400/20 focus:border-green-400 focus:ring-2 focus:ring-green-400/30 outline-none" required />
+      <button type="submit"
+        class="w-full bg-green-500/90 text-white font-semibold py-3 rounded-xl hover:bg-green-400 transition">
+        Login
+      </button>
+    </form>
+     <% if (errors && errors.length> 0) { %>
+            <ul>
+              <p class="text-white">Please check your information and try again.</p>
+              <% errors.forEach(err=> { %>
+                <li class="text-red font-bold">
+                  <%= err.msg %>
+                </li>
+                <% }) %>
+            </ul>
+            <% } %>
+    <p class="text-center text-gray-400 mt-6">
+      Don't have an account?
+      <a href="/signup" class="text-green-400 font-medium hover:underline">Sign Up</a>
+    </p>
+  </div>
+  </div>
+
+</body>
+</html>
