@@ -7,6 +7,6 @@ const { Pool } = require("pg");
 
 
 module.exports = new Pool({
- connectionString:DATABASE_URL
+ connectionString:process.env.DATABASE_URL
 
 });

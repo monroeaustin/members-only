@@ -1,3 +1,6 @@
+const { Client } = require("pg");
+require("dotenv").config();
+
 const createUsersTable = `
 CREATE TABLE IF NOT EXISTS users (
   id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -19,8 +22,8 @@ CREATE TABLE IF NOT EXISTS messages (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   CONSTRAINT body_min_len CHECK (char_length(body) >= 10)
-)
-`;
+);
+`
 
 const seedScriptSQL = `
 ${createUsersTable}
@@ -57,11 +60,10 @@ VALUES
  4,
  '2025-08-06 20:58:00');
 `;
-
 async function main() {
   console.log("seeding...");
   const client = new Client({
-    connectionString: process.env.DATABASE_URL,
+    connectionString: process.env.POSTGRES,
   });
   await client.connect();
   await client.query(seedScriptSQL);
