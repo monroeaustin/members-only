@@ -8,7 +8,7 @@ function showSignUp(req,res){
     res.render('sign-up');
 }
 async function processSignUp(req,res){
-    let user = {
+    let userInfo = {
         "firstName":req.body.FirstName,
         "lastName":req.body.LastName,
         "username":req.body.username
@@ -16,13 +16,13 @@ async function processSignUp(req,res){
  hashpw = await bcrypt.hash(req.body.password, 10);
 
  try {
-     await db.processSignUp(user,hashpw)
+     await db.signUpUser({userInfo},hashpw)
  }
  catch(err){
     console.error('Unable to SignUp', err)
     throw new Error('Error creating user profile.')
  }
-res.redirct('/login')
+res.redirect('/login')
 }
 
 function showLogin(req,res){

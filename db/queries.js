@@ -1,34 +1,19 @@
 const pool = require("./pool");
 
-async function signUpUser (user,hashedpw){
-
-    await pool.query(`INSERT INTO user (first_name,last_name,username,password_hash) 
-    VALUES ($1,$2,$3,$4,$5)`, [
-    user.firstName,
-    user.lastName,
-    user.username,
+async function signUpUser ({userInfo},hashedpw){
+    try {await pool.query(`INSERT INTO users (first_name,last_name,username,password_hash) 
+    VALUES ($1,$2,$3,$4)`, [
+    userInfo.firstName,
+    userInfo.lastName,
+    userInfo.username,
     hashedpw
-  ])
-}
-
-async function selectUser(username) {
-  try {
-    const result = await pool.query(
-      `SELECT username, password_hash FROM users WHERE username = $1`,
-      [username]
-    );
-
-    const user = result.rows[0];
-
-    if (!user) {
-      throw new Error('Username not found. Please sign up.');
-    }
-
-    return user;
-  } catch (err) {
-  throw err;
+  ])} catch (err) {
+    console.error(err)
+    throw new Error('Unable to create user.')
   }
+   
 }
+
 
 async function updateAdminStatus(userId) {
     try {
@@ -88,8 +73,7 @@ async function deleteMessage(author_id,message_id) {
     }
   
 }
-module.exports = {
-  signUpUser,
-  selectUser
-}
 
+module.exports = {
+    signUpUser
+}

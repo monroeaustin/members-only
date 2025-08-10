@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS messages (
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   CONSTRAINT body_min_len CHECK (char_length(body) >= 10)
-);
+)
 `;
 
 const seedScriptSQL = `
