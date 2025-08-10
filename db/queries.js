@@ -1,69 +1,51 @@
 const pool = require("./pool");
 
-async function signUpUser ({userInfo},hashedpw){
-    try {
-      await pool.query(`INSERT INTO users (first_name,last_name,username,password_hash) 
-    VALUES ($1,$2,$3,$4)`, [
-    userInfo.firstName,
-    userInfo.lastName,
-    userInfo.username,
-    hashedpw
-  ])} catch (err) {
-    console.error(err)
-    throw new Error('Unable to create user.')
-  }
-   
+// SIGNUP
+async function signUpUser({ userInfo }, hashedpw) {
+  await pool.query(
+    `INSERT INTO users (first_name, last_name, username, password_hash)
+     VALUES ($1, $2, $3, $4)`,
+    [userInfo.firstName, userInfo.lastName, userInfo.username, hashedpw]
+  );
+}
+
+// LOGIN HELPERS
+async function findByUsername(username) {
+  const { rows } = await pool.query(
+    `SELECT id, username, password_hash, first_name, last_name, is_admin, is_member
+     FROM users WHERE username = $1`,
+    [username]
+  );
+  return rows[0] || null;
+}
+
+async function findById(id) {
+  const { rows } = await pool.query(
+    `SELECT id, username, first_name, last_name, is_admin, is_member
+     FROM users WHERE id = $1`,
+    [id]
+  );
+  return rows[0] || null;
 }
 
 async function selectUser(username) {
   const { rows } = await pool.query(
-    `
-    SELECT username, password_hash FROM users
-    WHERE username = $1
-    `
-  ,[username])
-
-  return rows[0];
+    `SELECT username, password_hash FROM users WHERE username = $1`,
+    [username]
+  );
+  return rows[0] || null;
 }
 
-
-async function updateAdminStatus(userId) {
-    try {
-        const { rowCount } = await pool.query(`
-            UPDATE users
-            SET is_admin = true
-            WHERE id = $1
-        `, [userId]);
-
-        if (rowCount === 0) {
-            throw new Error('User not found');
-        }
-    } catch (err) {
-        console.error(err);
-        throw new Error(`Unable to update status: ${err.message}`);
-    }
+// ADMIN
+async function grantAdminAccess(userId) {
+  await pool.query(`UPDATE users SET is_admin = true WHERE id = $1`, [userId]);
 }
 
-async function createMessage (subject,message,user_id){
-    
-    await pool.query(`INSERT INTO messages (subject,body,user_id) 
-    VALUES ($1,$2,$3)`, [
-    subject,
-    message,
-    user_id,
-    
-  ])
-}
-
-async function showAllMessages() {
+// MESSAGES
+async function getAllMessages() {
   const { rows } = await pool.query(`
-    SELECT 
-      m.id,
-      m.subject,
-      m.body,
-      m.created_at,
-      u.id        AS user_id,
-      u.username  AS author_username
+    SELECT m.id, m.subject, m.body, m.created_at,
+           u.id AS author_id, u.username
     FROM messages m
     JOIN users u ON u.id = m.user_id
     ORDER BY m.created_at DESC
@@ -71,22 +53,28 @@ async function showAllMessages() {
   return rows;
 }
 
-async function deleteMessage(author_id,message_id) {
-    try {
-          await pool.query(`
-    DELETE FROM messages
-    WHERE user_id = ($1)
-    AND id = ($2);
-  `);
-    }
-    catch(err) {
-        console.error('Error When Deleting message message:', err)
-        throw new Error('Permission to delete message denied.')
-    }
-  
+async function createMessage({ userId, subject, body }) {
+  await pool.query(
+    `INSERT INTO messages (subject, body, user_id) VALUES ($1, $2, $3)`,
+    [subject, body, userId]
+  );
+}
+
+async function deleteMessage(author_id, message_id) {
+  await pool.query(
+    `DELETE FROM messages
+     WHERE user_id = $1 AND id = $2`,
+    [author_id, message_id]
+  );
 }
 
 module.exports = {
-    signUpUser,
-    selectUser
-}
+  signUpUser,
+  findByUsername,
+  findById,
+  selectUser,
+  grantAdminAccess,
+  getAllMessages,
+  createMessage,
+  deleteMessage,
+};
